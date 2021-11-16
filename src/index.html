@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="index.css">
+
+  <script src="https://cdn.ronghub.com/RongEmoji-2.2.7.js"></script>
+  
+</head>
+<body>
+  <h1>Emoji</h1>
+
+  <h2>融云消息 message 里的 emoji 说明</h2>
+  <ol>
+		<li>
+			<p>发消息时, 必须直接发送emoji原生字符. 如：😀 , 转换方法：symbolToEmoji</p>
+		</li>
+		<li>
+			<p>Web SDK接收消息时接收到的是unicode编码格式, 如：”ef600”.需要转化才能正确显示原生emoji</p>
+		</li>
+  </ol>
+
+  <h2>Emoji 说明</h2>
+  <ol>
+		<li>
+			<p>emoji 插件内置了128个emoji表情的图片, <strong>主要是为了做消息输入框的表情选项, </strong>也可自行扩展配置.</p>
+		</li>
+		<li>
+			<p>
+				支持范围: 
+				<p>(1), IE7+、Edge、Chrome 30+、Firefox 30+、Safari 10+ 等主流桌面版浏览器</p>
+				<p>(2), Android 4.4+系统的Chrome浏览器以及微信浏览器</p>
+				<p>(3), iPhone 操作系统iOS 8.0+ 的Safari浏览器以及微信浏览器</p>
+			</p>
+		</li>
+		<li>
+			<p><a onclick="setupExpand('initCode')">Emoji 初始化设置</a></p>
+			<pre id="initCode" style="display: none">
+				// 直接初始化
+				RongIMLib.RongIMEmoji.init();
+
+				// 通过配置初始化
+				// 表情信息可参考 <a href="http://unicode.org/emoji/charts/full-emoji-list.html">http://unicode.org/emoji/charts/full-emoji-list.html</a>
+				var config = {
+						size: 24, // 大小, 默认 24, 建议15 - 55
+						url: '//f2e.cn.ronghub.com/sdk/emoji-48.png', // 所有 emoji 的背景图片
+						lang: 'zh', // 选择的语言, 默认 zh
+						// 扩展表情
+						extension: {
+								dataSource: {
+										"u1F914":{  
+												"en":"thinking face", // 英文名称
+												"zh":"思考", // 中文名称
+												"tag":"🤔", // 原生emoji
+												"position":"0px 0px" // 所在背景图位置坐标
+										},
+										.....
+										.....
+								},
+								// 新增 emoji 的背景图 url
+								url: 'https://emojipedia-us.s3.amazonaws.com/thumbs/160/apple/96/thinking-face_1f914.png'
+						}
+				};
+				RongIMLib.RongIMEmoji.init(config);
+			</pre>
+		</li>
+
+		<li>
+			<p><a onclick="setupExpand('sdkFuc')">Emoji API</a></p>
+			<table id="sdkFuc" class="table table-bordered" style="display: none; width: 97%">
+				<thead>
+					<tr>
+						<th>方法</th>
+						<th>使用示例</th>
+						<th>方法说明</th>
+					</tr>
+				</thead>
+					<tbody>
+						<tr>
+							<td>list</td>
+							<td>
+								<!-- start -->                        
+								<pre>var list = RongIMEmoji.list;</pre>
+								<!-- end -->
+							</td>
+							<td>
+								获取所有数据，方便二次开发<br>[{unicode: "u1F600", emoji: "😀", symbol:"[笑嘻嘻]", shadowDom: span }, { }, ………]
+							</td>
+						</tr>
+						<tr>
+							<td>emojiToSymbol(emoji, reg, func)</td>
+							<td>
+								<!-- start -->
+								<pre>var symbol = RongIMEmoji.emojiToSymbol('我是一个表情😁');<strong>返回值: 我是一个表情[露齿而笑]</strong></pre>
+								<!-- end -->
+							</td>
+							<td>将原生emoji转化为对应文字</td>
+						</tr>
+						<tr>
+							<td>symbolToEmoji(symbol, func)</td>
+							<td>
+								<!-- start -->
+								<pre>
+								var emoji = RongIMEmoji.symbolToEmoji('我是一个表情[露齿而笑]');
+								<strong>返回值: 我是一个表情😁</strong>
+								var emoji = RongIMEmoji.symbolToEmoji('我是一个表情[露齿而笑]', function(emoji) { 
+									return '[emoji]'; 
+								}); 
+								<strong>返回值: 我是一个表情[emoji]</strong></pre>
+								<!-- end -->
+							</td>
+							<td>将emoji的对应名称转化为原生emoji字符</td>
+						</tr>
+						<tr>
+							<td>emojiToHTML(emoji, size, reg, func)</td>
+							<td>
+								<!-- start -->
+								<pre>var html = RongIMEmoji.emojiToHTML('我是一个表情😁');</pre>
+								<!-- end -->
+							</td>
+							<td>将原生emoji转化为span标签, 默认标签大小为24px</td>
+						</tr>
+						<tr>
+							<td>symbolToHTML(symbol, size, reg, func)</td>
+							<td>
+								<!-- start -->
+								<pre>var html = RongIMEmoji.symbolToHTML('我是一个表情[露齿而笑]')</pre>
+								<!-- end -->
+								</td>
+							<td>将原生emoji转化为span标签</td>
+						</tr>
+						<tr>
+							<td>isSupportEmoji</td>
+							<td>
+								<!-- start -->
+								<pre>var isSupportEmoji = RongIMEmoji.isSupportEmoji;</pre>
+								<!-- end -->                            
+							</td>
+							<td>判断是否支持emoji的渲染</td>
+						</tr>
+				</tbody>
+			</table>
+		</li>
+  </ol>
+    
+  <div class="chatbox">
+    <h2>发送表情极简demo</h3>
+    <div class="chatbox-tools">
+      <div class="chatbox-tools-emoji">
+        <a href="#emoji" class="chatbox-emoji-btn" id="chatbox-emoji-btn">表情</a>
+        <div class="chatbox-emoji-panel" id="chatbox-emoji-panel"></div>
+      </div>
+    </div>
+    <ol class="chatbox-show" id="chatbox-show"></ol>
+    <textarea class="chatbox-message" id="chatbox-message">今天心情很不错[笑嘻嘻]</textarea>
+    <p> 
+      <a class="chatbox-btn" id="symbol-emoji">SymbolToEmoji</a>
+      <a class="chatbox-btn" id="emoji-symbol" onclick="emojiToSymbol">EmojiToSymbol</a> 
+      <a class="chatbox-btn" id="emoji-html" onclick="emojiToHtml">EmojiToHtml</a> 
+      <a class="chatbox-btn" id="symbol-html" onclick="symbolToHtml">SymbolToHtml</a> 
+    </p>
+    <p>
+      <a class="chatbox-btn" id="symbol-emoji-invalid">SymbolToEmoji( 不支持emoji时, 原生emoji字符显示为 [emoji] )</a>
+    </p>
+  </div>
+    
+  <script src="index.js"></script>
+</body>
+</html>
